@@ -1,24 +1,16 @@
 export default async function handler(req, res) {
   try {
-    const response = await fetch(
-      "https://raw.githubusercontent.com/changelog-modul/start/main/start.lua",
-      {
-        headers: {
-          "User-Agent": "Vercel-Proxy"
-        }
-      }
+    const r = await fetch(
+      "https://raw.githubusercontent.com/changelog-modul/start/main/start.lua"
     )
 
-    if (!response.ok) {
-      return res.status(500).send("-- Failed to fetch script")
-    }
-
-    const text = await response.text()
+    const text = await r.text()
 
     res.setHeader("Content-Type", "text/plain")
+    res.setHeader("Cache-Control", "no-store")
     res.status(200).send(text)
 
-  } catch (err) {
+  } catch (e) {
     res.status(500).send("-- Proxy error")
   }
 }
